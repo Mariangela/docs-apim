@@ -1,19 +1,13 @@
-# Configure a Analytics workers as active-passive
+# Configure Analytics Workers as Active-Passive
 
-Minimum high availability deployment mainly focused on providing high availability which guarantees no data loss if the 
-system suffer any failing due to several unforeseeable reasons. One of the main advantage of this is it uses minimum 
-amount of infrastructure resources possible. Thus deployment pattern comprise of only two Streaming integration 
-servers.
+Minimum high availability (HA) deployment mainly focused on providing high availability which guarantees no data loss if the system suffer any failing due to several unforeseeable reasons. One of the main advantage of this is it uses minimum amount of infrastructure resources possible. Thus deployment pattern comprise of only two Streaming integration servers.
 
 [![API-M Analytics active-passive deployment]({{base_path}}/assets/img/setup-and-install/analytics-active-passive-deployment.png)]({{base_path}}/assets/img/setup-and-install/analytics-active-passive-deployment.png)
 
-In minimum HA setup, one node is assigned as the active node while the other node is assigned as the passive node.
-Only the active node processes the incoming events and publishes the outgoing events. Internally, the active node 
-publishes the events to the passive node, but the passive node does not process or send any events outside as mentioned 
-earlier. In a scenario where the active node fails, the passive node is activated, and it starts receiving events and 
-then publishes them from where the active node left off. Once the terminated (previously active) node restarts , it 
-operates in the passive state. In the passive node, sources are in an inactive mode where they will not receive events 
-into the system. 
+In minimum HA setup, one node is assigned as the active node while the other node is assigned as the passive node. Only the active node processes the incoming events and publishes the outgoing events. Internally, the active node publishes the events to the passive node, but the passive node does not process or send any events outside as mentioned earlier. In a scenario where the active node fails, the passive node is activated, and it starts receiving events and then publishes them from where the active node left off. Once the terminated (previously active) node restarts , it operates in the passive state. In the passive node, sources are in an inactive mode where they will not receive events into the system.
+
+!!! note
+    The dashboard profile setup depends on the deployment. In an Active-Passive worker setup, you can have 2 JVMs for HA. As you have only 2 nodes, it is fine to use the dashboard of the same binary (pack). 
 
 !!! note
     The ports that are open only in the active node at a given time include the Siddhi Store Query API endpoint to which 
@@ -49,8 +43,7 @@ In order to configure a minimum HA cluster, the following prerequisites must be 
     `<APIM_ANALYTICS_HOME>/lib` directory of both nodes. 
   - In order to retrieve the state of the Siddhi Applications deployed in the system in case of a scenario where both the 
     nodes fail, state persistence must be enabled for both nodes by specifying the same datasource/file location. 
-    For detailed instructions, see <a target="_blank" href="configuring-Database-and-File-System-State-Persistence">
-    Configuring Database and File System State Persistence</a> for more information.
+    For detailed instructions, see [Configuring Database and File System State Persistence]({{base_path}}/install-and-setup/setup/distributed-deployment/configure-apim-analytics/configuring-database-and-file-system-state-persistence).
   - A load balancer or some other client-side data publishing mechanism that works in a failover manner must be available 
     to publish events to one of the available nodes (i.e., to the active node). 
     
@@ -262,6 +255,7 @@ configurations (HA configuration)
              password: pass
              username: root
              driverClassName: com.mysql.jdbc.Driver
+             minIdle: 5
              maxPoolSize: 50
              idleTimeout: 60000
              connectionTestQuery: SELECT 1
@@ -301,5 +295,4 @@ synchronization can take place effectively even if the Siddhi applications are a
         in the `<APIM_ANALYTICS_HOME>/conf/worker/deployment.yaml` file must be updated to listen to different ports. The 
         offset property under the ports section of the wso2.carbon section found in the `<APIM_ANALYTICS_HOME>/conf/worker/deployment.yaml`
         should also be changed in one SI instance to avoid conflicts when starting both servers.
-    
     
