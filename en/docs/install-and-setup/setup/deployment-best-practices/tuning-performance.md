@@ -2,12 +2,6 @@
 
 This section describes some recommended performance tuning configurations to optimize WSO2 API Manager. It assumes that you have set up the API Manager on Unix/Linux, which is recommended for a production deployment.
 
--   [OS-level settings](#os-level-settings)
--   [JVM-level settings](#jvm-level-settings)
--   [WSO2 Carbon platform-level settings](#wso2-carbon-platform-level-settings)
--   [APIM-level settings](#apim-level-settings)
--   [Rate limit data and Analytics-related settings](#rate-limit-data-and-analytics-related-settings)
-
 !!! warning
     Performance tuning requires you to modify important system files, which affect all programs running on the server. WSO2 recommends that you familiarize yourself with these files using Unix/Linux documentation before editing them.
 
@@ -29,7 +23,7 @@ When it comes to performance, the OS that the server runs plays an important rol
 
 Following are the configurations that can be applied to optimize the OS-level performance:
 
-1.  To optimize etwork and OS performance, configure the following settings in the `/etc/sysctl.conf` file of Linux. These settings specify a larger port range, a more effective TCP connection timeout value, and a number of other important parameters at the OS-level.
+1.  To optimize network and OS performance, configure the following settings in the `/etc/sysctl.conf` file of Linux. These settings specify a larger port range, a more effective TCP connection timeout value, and a number of other important parameters at the OS-level.
 
     !!! info
         It is **not recommended** to use `net.ipv4.tcp_tw_recycle = 1` when working with network address translation (NAT), such as if you are deploying products in EC2 or any other environment configured with NAT.
@@ -60,7 +54,7 @@ Following are the configurations that can be applied to optimize the OS-level pe
 
     Optimal values for these parameters depend on the environment.
 
-3.  To alter the maximum number of processes your user is allowed to run at a given time, configure the following settings in the `/etc/security/limits.conf` file of Linux (be sure to include the leading \* character). Each Carbon server instance you run would require upto 1024 threads (with default thread pool configuration). Therefore, you need to increase the nproc value by 1024 per each Carbon server (both hard and soft).
+3.  To alter the maximum number of processes your user is allowed to run at a given time, configure the following settings in the `/etc/security/limits.conf` file of Linux (be sure to include the leading \* character). Each Carbon server instance you run would require up to 1024 threads (with default thread pool configuration). Therefore, you need to increase the nproc value by 1024 per each Carbon server (both hard and soft).
 
     ``` java
     * soft nproc 20000
@@ -90,12 +84,7 @@ In multi-tenant mode, the WSO2 Carbon runtime limits the thread execution time. 
 -   The `className` is the Java class used for the implementation. Set it to `org.wso2.carbon.tomcat.ext.valves.CarbonStuckThreadDetectionValve`.
 -   The `threshold` gives the minimum duration in seconds after which a thread is considered stuck. The default value is 600 seconds.
 
-## APIM-level settings
-
--   [Timeout configurations for an API call](#timeout-configurations-for-an-api-call)
--   [General APIM-level recommendations](#general-apim-level-recommendations)
--   [Registry indexing configurations](#registry-indexing-configurations)
--   [Tuning data-agent parameters](#tuning-data-agent-parameters)
+## API-M-level settings
 
 ### Timeout configurations for an API call
 
@@ -108,32 +97,31 @@ The following diagram shows the communication/network paths that occur when an A
     
 -   **Key validation**
 
-    Key validation occurs via a Servlet HTTP call and the connection timeout can be configured by changing the following configuration details in the `<API-M_HOME>/repository/conf/axis2/axis2_client.xml` file. All timeout values are in milliseconds.
+    Key validation occurs via a Servlet HTTP call and the connection timeout can be configured by changing the following configuration details in the `<API-M_HOME>/repository/conf/deployment.toml` file. All timeout values are in milliseconds.
 
-    ```
-    <transportSender name="https" class="org.apache.axis2.transport.http.CommonsHTTPTransportSender">
-        <parameter name="SO_TIMEOUT">60000</parameter>
-        <parameter name="CONNECTION_TIMEOUT">60000</parameter>
-    </transportSender>
+    ```toml
+    [transport.client.http.properties]
+    SO_TIMEOUT = 60000
+    CONNECTION_TIMEOUT = 60000
     ```
 
     If the Key Manager caching is enabled, the calls between the API Gateway and Key Manager are cached. As a result, the Key Manager is not invoked for each API call.
 
 -   **Client call API Gateway + API Gateway call Backend**
 
-    For backend communication, the API Manager uses PassThrough transport. This is configured in the `<API-M_HOME>/repository/conf/deployment.toml` file. For more information, see [Configuring passthru properties](https://docs.wso2.com/display/EI650/Tuning+the+HTTP+Transport) in the WSO2 Enterprise Integrator documentation. Add the following section to the `deployment.toml` file to configure the Socket timeout value.
+    For backend communication, the API Manager uses PassThrough transport. This is configured in the `<API-M_HOME>/repository/conf/deployment.toml` file. For more information, see [Configuring passthrough properties](https://docs.wso2.com/display/EI650/Tuning+the+HTTP+Transport) in the WSO2 Enterprise Integrator documentation. Add the following section to the `deployment.toml` file to configure the Socket timeout value.
             ``` java
-            [passthru_http]
-            http.socket.timeout=180000
+                [passthru_http]
+                http.socket.timeout=180000
             ```
 
     !!! info
         The default value for `http.socket.timeout` differs between WSO2 products. In WSO2 API-M, the default value for `http.socket.timeout` is 180000ms.
 
 
-### General APIM-level recommendations
+### General API-M-level recommendations
 
-Some general APIM-level recommendations are listed below:
+Some general API-M-level recommendations are listed below:
 
 <table>
 <thead>
@@ -150,7 +138,7 @@ Some general APIM-level recommendations are listed below:
 <ul>
 <li><code> -Xms2048m -Xmx2048m -XX:MaxPermSize=1024m </code></li>
 </ul>
-<p>Set the following in the <code>               &lt;API-M_HOME&gt;/repository/conf/axis2/axis2_client.xml              </code> file:</p>
+<p>Set the following in the <code>               &lt;API-M_HOME&gt;/repository/conf/deployment.toml              </code> file:</p>
 
 <div class="admonition note">
      <p class="admonition-title">Note</p>
@@ -160,8 +148,12 @@ Some general APIM-level recommendations are listed below:
 </div>
      <div class="code panel pdl" style="border-width: 1px;">
 <div class="codeContent panelContent pdl">
-<pre class="java" data-syntaxhighlighter-params="brush: java; gutter: false;"  style="brush: java; gutter: false;"><code>&lt;parameter name=&quot;defaultMaxConnPerHost&quot;&gt;1000&lt;/parameter&gt; 
-&lt;parameter name=&quot;maxTotalConnections&quot;&gt;30000&lt;/parameter&gt; </code></pre>
+<pre class="java" data-syntaxhighlighter-params="brush: java; gutter: false;"  style="brush: java; gutter: false;"><code>
+[transport.client]
+default_max_connection_per_host = 1000
+max_total_connections = 30000
+</code>
+</pre>
 </div> 
 </td>
 </tr>
@@ -479,14 +471,14 @@ The Thrift section is related to Analytics, and the Binary section is related to
 <td>250</td>
 <td>This value must be increased when there is an increase in the throughput of events handled by WSO2 API-M Analytics.<br />
 <br />
-The value of the <code>             tcpMaxWorkerThreads            </code> parameter in the <code>             &lt;APIM-ANALYTICS_HOME&gt;/repository/conf/data-bridge/data-bridge-config.xml            </code> must change based on the value specified for this parameter and the number of data publishers publishing statistics. For example, when the value for this parameter is <code>             250            </code> and the number of data publishers is 7, the value for the <code>             tcpMaxWorkerThreads            </code> parameter must be <code>             1750            </code> (i.e., 7 * 250). This is because you need to ensure that there are enough receiver threads to handle the number of messages published by the data publishers.</td>
+The value of the <code>             tcpMaxWorkerThreads            </code> parameter defined under <code>databridge.config:</code> in the <code>             &lt;API-M_ANALYTICS_HOME&gt;/conf/worker/deployement.yaml            </code> must change based on the value specified for this parameter and the number of data publishers publishing statistics. For example, when the value for this parameter is <code>             250            </code> and the number of data publishers is 7, the value for the <code>             tcpMaxWorkerThreads            </code> parameter must be <code>             1750            </code> (i.e., 7 * 250). This is because you need to ensure that there are enough receiver threads to handle the number of messages published by the data publishers.</td>
 </tr>
 <tr class="even">
 <td><code>             secure_max_transport_pool_size            </code></td>
 <td>The maximum number of secure transport threads that should be allocated at any given time to publish WSO2 API-M statistical data to the Analytics Server.</td>
 <td>250</td>
 <td><p>This value must be increased when there is an increase in the throughput of events handled by WSO2 API-M Analytics.</p>
-<p>The value of the <code>              sslMaxWorkerThreads             </code> parameter in the <code>              &lt;APIM-ANALYTICS_HOME&gt;/repository/conf/data-bridge/data-bridge-config.xml             </code> must change based on the value specified for this parameter and the number of data publishers publishing statistics. For example, when the value for this parameter is <code>              250             </code> and the number of data publishers is 7, the value for the <code>              sslMaxWorkerThreads             </code> parameter must be <code>              1750             </code> (i.e., 7 * 250). This is because you need to ensure that there are enough receiver threads to handle the number of messages published by the data publishers.</p></td>
+<p>The value of the <code>              sslMaxWorkerThreads             </code> parameter defined under <code>databridge.config:</code> in the <code>              &lt;API-M_ANALYTICS_HOME&gt;/conf/worker/deployement.yaml             </code> must change based on the value specified for this parameter and the number of data publishers publishing statistics. For example, when the value for this parameter is <code>              250             </code> and the number of data publishers is 7, the value for the <code>              sslMaxWorkerThreads             </code> parameter must be <code>              1750             </code> (i.e., 7 * 250). This is because you need to ensure that there are enough receiver threads to handle the number of messages published by the data publishers.</p></td>
 </tr>
 </tbody>
 </table>
