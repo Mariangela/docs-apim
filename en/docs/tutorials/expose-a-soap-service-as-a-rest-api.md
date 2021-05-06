@@ -1,16 +1,15 @@
 # Expose a SOAP service as a REST API
 
 WSO2 API Manager supports the management of an existing SOAP and WSDL based services exposing as REST APIs.
-The organizations who have SOAP/ WSDL based services, can easily bridge their existing services to REST without the cost of a major migration. WSO2 API Manager supports two kinds of services as one for performing a  "pass through" of the SOAP message to the backend and other one is generating [a RESTful api from the backend SOAP service]({{base_path}}/learn/design-api/create-api/generate-rest-api-from-soap-backend/).
+The organizations who have SOAP/ WSDL based services, can easily bridge their existing services to REST without the cost of a major migration. WSO2 API Manager supports two kinds of services as one for performing a  "pass through" of the SOAP message to the backend and other one is generating [a RESTful api from the backend SOAP service]({{base_path}}/design/create-api/generate-rest-api-from-soap-backend/).
 
 This tutorial will explain the steps to design, publish and invoke a SOAP service as a RESTful API using **Pass Through**
 
 ### Step 1 - Design a SOAP service as a REST API
 
 1.  Sign in to the API Publisher and click **CREATE API**.
-      <html>
-     <img src="{{base_path}}/assets/img/learn/create-soap-api.jpg" height="400" width="450">
-     </html>
+    
+    [![Create SOAP API]({{base_path}}/assets/img/learn/create-soap-api.jpg)]({{base_path}}/assets/img/learn/create-soap-api.jpg)
 
 2.  Select **Pass Through** option and thereafter, select one of the following options:
 
@@ -25,7 +24,7 @@ This tutorial will explain the steps to design, publish and invoke a SOAP servic
      </html>
 
      This example uses the WSDL `http://ws.cdyne.com/phoneverify/phoneverify.asmx?wsdl` from CDYNE as the endpoint here, but you can use any SOAP backend of your choice.
-        ![]({{base_path}}/assets/img/learn/generate-rest-api-from-soap-backend.jpg)
+        ![Create SOAP Pass Through API]({{base_path}}/assets/img/learn/generate-rest-api-from-soap-backend.jpg)
 
 3.  Click **NEXT** button to proceed to the next phase and Provide the information in the table below and click **CREATE** button.
 
@@ -35,28 +34,27 @@ This tutorial will explain the steps to design, publish and invoke a SOAP servic
     | Context | /phoneverify       |
     | Version | 1.0                |
     | Endpoint| http://ws.cdyne.com/phoneverify/phoneverify.asmx|
-    | Business Plans| Unlimited|
 
-    ![]({{base_path}}/assets/img/learn/create-soap-api-form.jpg)
+    ![Create SOAP API]({{base_path}}/assets/img/learn/create-soap-api-form.jpg)
 
 4.  The created API appears in the publisher as follows.
-    ![]({{base_path}}/assets/img/learn/created-soap-api.jpg)
+    ![SOAP API overview]({{base_path}}/assets/img/learn/created-soap-api.jpg)
 
 5.  API definiton of the Created schema has been displayed at **API Definiton** tab.
-     [![]({{base_path}}/assets/img/learn/api-definition-of-soap-api-created-by-passthrough-mode.jpg)]({{base_path}}/assets/img/learn/api-definition-of-soap-api-created-by-passthrough-mode.jpg)
+     [![SOAP API Definition]({{base_path}}/assets/img/learn/api-definition-of-soap-api-created-by-passthrough-mode.jpg)]({{base_path}}/assets/img/learn/api-definition-of-soap-api-created-by-passthrough-mode.jpg)
   
     <html><div class="admonition note"><p class="admonition-title">Note</p>
     <p>
             If you wish to add scopes to the resources that were created, navigate to ***Resources*** and expand the resources. Thereafter, creating new scopes and specify them under operation scope. If you specify a scope, you need to use the same scope when generating access tokens for the subscribed application to invoke the API. For more information on working with the scopes, see
-    [OAuthscopes]({{base_path}}/learn/api-security/oauth2/oauth2-scopes/fine-grained-access-control-with-oauth-scopes/)
+    [OAuthscopes]({{base_path}}/design/api-security/oauth2/oauth2-scopes/fine-grained-access-control-with-oauth-scopes/)
             </p>
         </div></html>   
 
-    ![]({{base_path}}/assets/img/learn/add-scope-for-passthrough-soap-api.jpg)
+    ![Add scopes for Pass Through API]({{base_path}}/assets/img/learn/add-scope-for-passthrough-soap-api.jpg)
      <html><div class="admonition note">
      <p class="admonition-title">Note</p>
      <p> Note that when creating this API, the default option of **Rate limiting level** , was selected to **API Level**. For more information on setting advanced throttling policies,
-     see [Enforce Throttling and Resource Access Policies]({{base_path}}/learn/rate-limiting/setting-throttling-limits/).</p>
+     see [Enforce Throttling and Resource Access Policies]({{base_path}}/design/rate-limiting/setting-throttling-limits/).</p>
      </div>
      </html>
      
@@ -66,7 +64,7 @@ This tutorial will explain the steps to design, publish and invoke a SOAP servic
 
 ### Step 2 - Invoke a SOAP service as a REST API.
 
-1.  Log in to the developer portal, navigate to **Credentials** tab and subscribe to  the api using (e.g.,DefaultApplication)
+1.  Log in to the developer portal, navigate to **Subscriptions** tab and subscribe to  the api using (e.g.,DefaultApplication)
       ![]({{base_path}}/assets/img/learn/subscribed-to-api.jpg)
 
 2.  Click the **MANAGE APP** button when prompted **View Credentials**.
@@ -95,8 +93,7 @@ This tutorial will explain the steps to design, publish and invoke a SOAP servic
       <td>SOAP Request</td>
        <td>
        <pre>
-         <?xml version="1.0" encoding="utf-8"?>
-                &lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
+            &lt;soap:Envelope xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/"&gt;
                 &lt;soap:Body&gt;
                     &lt;CheckPhoneNumber xmlns="http://ws.cdyne.com/PhoneVerify/query"&gt;
                     &lt;PhoneNumber&gt;18006785432&lt;/PhoneNumber&gt;
@@ -125,7 +122,7 @@ This tutorial will explain the steps to design, publish and invoke a SOAP servic
     <html><div class="admonition note">
      <p class="admonition-title">Note</p>
      <p>You can also invoke this API using a third-party tool such as SOAP UI. For more information on how to invoke an API using a SOAP client, 
-     see [Invoke an API using a SOAP Client]({{base_path}}/learn/consume-api/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-a-soap-client/) .</p>
+     see [Invoke an API using a SOAP Client]({{base_path}}/consume/invoke-apis/invoke-apis-using-tools/invoke-an-api-using-a-soap-client/) .</p>
      </div>
      </html>
 

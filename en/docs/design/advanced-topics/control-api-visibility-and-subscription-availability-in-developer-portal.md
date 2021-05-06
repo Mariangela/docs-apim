@@ -19,16 +19,14 @@ Given below is how visibility levels work for users in different roles:
     - all APIs in the registered user's tenant domain as long as the API is not restricted to a role that the user is assigned to.
 
 ### Control API visibility using the API Publisher
-
+ 
 1.  Sign in to the API Publisher as an API creator using the following URL: 
     
      `https://<localhost>:9443/publisher` 
 
-2.  [Create a new API]({{base_path}}/learn/design-api/create-api/create-a-rest-api/) or edit an existing API.
-3.  Click **Design Configurations**, click **Developer Portal Visibility**, and select the desired visibility option.
-    
-     [![Developer Portal Visibility]({{base_path}}/assets/img/learn/api-visibility-devportal.png)]({{base_path}}/assets/img/learn/api-visibility-devportal.png)
-    
+2.  [Create a new API]({{base_path}}/design/create-api/create-rest-api/create-a-rest-api/) or edit an existing API.
+3.  Go to **Portal Configurations** from the left menu and click **Basic Info**. Then under **Developer Portal Visibility** select the desired visibility option.
+        
      [![API visibility Developer Portal dropdown]({{base_path}}/assets/img/learn/api-visibility-devportal-dropdown.png)]({{base_path}}/assets/img/learn/api-visibility-devportal-dropdown.png)
 
 4.  Save the API.
@@ -73,7 +71,10 @@ Subscription availability can be one of the following options:
 - **Available to Specific Tenants:** users of the organizations/tenant domains that you specify, as well as the current tenant domain, can subscribe to the API.
 
 The diagram below depicts the relationship between the API's visibility and subscription availability:
-[![]({{base_path}}/assets/img/learn/api-visibility-relationship.png)](/{{base_path}}/assets/img/learn/api-visibility-relationship.png)
+[![]({{base_path}}/assets/img/learn/api-visibility-relationship.png)]({{base_path}}/assets/img/learn/api-visibility-relationship.png)
+
+!!! note
+     The experience of cross tenant subscriptions is different to what it was in previous versions. For example, if a tenant named "A" visits the Developer Portal of a tenant named "B", the tenant "A" user will need to generate keys again with the key manager of tenant "B". Therefore, a given application created in the Developer Portal by tenant "A" can have different consumer keys for a given key manager type as they generate keys in different tenants.
 
 
 ### Control subscription availability using the API Publisher
@@ -81,15 +82,22 @@ The diagram below depicts the relationship between the API's visibility and subs
 !!! note
     The subscription availability option will only be displayed if there are tenants in your environment.
 
+!!! Important
+     By default, the **Subscription Availability** dropdown list is not displayed in the publisher portal. Add the following configuration to the `<API-M_HOME>/repository/conf/deployment.toml` file in order to display the **Subscription Availability** dropdown list.
+     ```toml
+     [apim.devportal]
+     enable_cross_tenant_subscriptions = true
+     ```
+
 1.  Sign in to the API Publisher as an API creator using the following URL: 
 
      `https://<localhost>:9443/publisher`
 
-2.  [Create a new API]({{base_path}}/learn/design-api/create-api/create-a-rest-api/) or edit an existing API.
+2.  [Create a new API]({{base_path}}/design/create-api/create-rest-api/create-a-rest-api/) or edit an existing API.
 
-3.  Click **Subscriptions**, click the **Subscription Availability** dropdown, and select the desired subscription availability option.
+3.  Go to **Portal Configurations** from the left menu and click **Subscriptions**, click the **Subscription Availability** dropdown, and select the desired subscription availability option.
      
-     [ ![Relationship between the API's visibility and subscription availability]({{base_path}}/assets/img/learn/api-subscription-availability.png) ](/{{base_path}}/assets/img/learn/api-subscription-availability.png)
+     [![Relationship between the API's visibility and subscription availability]({{base_path}}/assets/img/learn/api-subscription-availability.png)]({{base_path}}/assets/img/learn/api-subscription-availability.png)
 
 4.  Save the API.
 
@@ -124,6 +132,3 @@ When using the REST API directly, the subscription availability options are avai
     </tbody>
     </table>
     
-    
-
-

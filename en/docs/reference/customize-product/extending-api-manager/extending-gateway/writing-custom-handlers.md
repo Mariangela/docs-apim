@@ -4,8 +4,7 @@ This section introduces handlers and using an example, explains how to write a c
 
 ## Introducing Handlers
 
-When an API is created, a file with its synapse configuration is added to the API Gateway. You can find it in the 
-`<APIM_HOME>/repository/deployment/server/synapse-configs/default/api` folder. It has a set of handlers, each of which 
+When an API is created and deployed, the API is added to the API Gateway Memory. It has a set of handlers, each of which 
 is executed on the APIs in the same order they appear in the configuration. You find the default handlers in any API's 
 Synapse definition as shown below.
 
@@ -38,10 +37,6 @@ Let's see what each handler does:
  the token is of type `Production` or `Sandbox` and sets `MessageContext` variables as appropriate.
  - **APIThrottleHandler:** Throttles requests based on the throttling policy specified by the `policyKey` property. 
  Throttling is applied both at the application level as well as subscription level.
- - **APIMgtUsageHandler:** Publishes events to WSO2 Stream Processor (WSO2 SP) for collection and analysis of statistics. 
- This handler only comes to effect if API usage tracking is enabled . 
- See the [Overview of API Analytics](../../../analytics/overview-of-api-analytics) 
- section for more information.
  - **APIMgtGoogleAnalyticsTrackingHandler:** Publishes events to Google Analytics. This handler only comes into effect 
  if Google analytics tracking is enabled. See Integrating with Google Analytics for more information.
  - **APIManagerExtensionHandler** : Triggers extension sequences. By default, the extension handler is listed at last 
@@ -84,30 +79,6 @@ WSO2 API Manager that can be used for logging.
 
 In order to enable logging by invoking `APILogMessageHandler` , follow the steps below.
 
-**To enable Message Logging per API :**
-
-1.  Open the synapse configuration of the API located in `<APIM_HOME>/repository/deployment/server/synapse-configs/default/api` 
-directory and add below handler before `</Handlers>` .
-
-    ``` java
-    <handler class="org.wso2.carbon.apimgt.gateway.handlers.logging.APILogMessageHandler"/> 
-    ```
-
-2.  Copy the following code into the `<APIM_HOME>/repository/conf/log4j2.properties` file to enable printing DEBUG logs.
-
-    ``` java
-    logger.log-msg-handler.name = org.wso2.carbon.apimgt.gateway.handlers.logging.APILogMessageHandler
-    logger.log-msg-handler.name = DEBUG
-    ```
-    Append the `log-msg-handler` logger name to `loggers` configuration which is a comma separated list of all active loggers. Sample configuration can be seen below.
-
-    ```
-    loggers = log-msg-handler, trace-messages, org-apache-coyote,com-hazelcast
-    ```
-
-    !!! note
-        The logger name `log-msg-handler` can be replaced by any logger-name.
-
 **To enable Message Logging into APIS created from publisher automatically :**
 
 1.  Open the `<APIM_HOME>/repository/resources/api_templates/velocity_template.xml` file and copy the following handler 
@@ -116,13 +87,26 @@ before `</Handlers>`.
     ``` java
     <handler class="org.wso2.carbon.apimgt.gateway.handlers.logging.APILogMessageHandler"/> 
     ```
+    
+        !!! note
+            In a fully distributed setup, this configuration should be done in the Traffic manager Node.
+            
+2.  Copy the following code into the `<APIM_HOME>/repository/conf/log4j2.properties` file to enable printing DEBUG logs.
 
-2.  Restart API Manager.
+    ``` java
+    logger.log-msg-handler.name = org.wso2.carbon.apimgt.gateway.handlers.logging.APILogMessageHandler
+    logger.log-msg-handler.level = DEBUG
+    ```
+    Append the `log-msg-handler` logger name to `loggers` configuration which is a comma-separated list of all active loggers. The sample configuration is given below.
 
-!!! note
-    To perform analytics with the logs, see 
-    [Analyzing the Log Overview](../../../analytics/analyzing-the-log-overview) .
+    ```
+    loggers = log-msg-handler, trace-messages, org-apache-coyote,com-hazelcast
+    ```
 
+        !!! note
+            The logger name `log-msg-handler` can be replaced by any logger-name.
+        
+3.  Restart API Manager.
 
 ## Writing a custom handler
 
@@ -143,7 +127,7 @@ Let's see how you can write a custom handler and apply it to the API Manager. In
 authentication handler. Make sure your custom handler name is not the same as the name of an existing handler.
 
 WSO2 API Manager provides the OAuth2 bearer token as its default authentication mechanism. A sample implementation 
-is <a href="{{base_path}}/assets/attachments/learn/APIAuthenticationHandler.java" download>here</a>. Similarly, you can extend the API Manager to 
+is <a href="{{base_path}}/assets/attachments/learn/api-authentication-handler.java" download>here</a>. Similarly, you can extend the API Manager to 
 support any custom authentication mechanism by writing your own authentication handler class.
 
 Given below is an example implementation. Please find the complete project archive 
@@ -155,6 +139,7 @@ package org.wso2.carbon.test;
 import org.apache.synapse.MessageContext;
 import org.apache.synapse.core.axis2.Axis2MessageContext;
 import org.apache.synapse.rest.AbstractHandler;
+import org.wso2.carbon.apimgt.gateway.handlers.security.APISecurityException;
 
 import java.util.Map;
 
@@ -228,23 +213,6 @@ Make sure to update the pom file for the above project you created(or downloaded
     You can engage a custom handler to all APIs at once or only to selected APIs. To engage a custom handler to APIs, 
     you need to add the custom handler with its logic in the `<APIM_HOME>/repository/resources/api_templates/velocity_template.xml` 
     file.
-
-    <div class="admonition note">
-        <p class="admonition-title">Note</p>
-        <p>
-            A quicker way to engage the handler for the **purpose of trying it out** is to add the handler to the relevant API artifact file resides in `<APIM_HOME>/repository/deployment/server/synapse-configs/default/api` directory using the following segment.
-        </p>
-        <p>
-            ```
-            <handler class="org.wso2.carbon.apimgt.custom.authentication.handler.CustomAPIAuthenticationHandler" />
-
-            ```
-        </p>
-        <p>
-            However, it is not recommended to update the API source code via the source view UI or file system when engaging a 
-            custom handler to selected APIs, because the customizations get overridden by the publisher updates.
-        </p>
-    </div>
 
     For example, the following code segment adds the custom authentication handler that you wrote earlier to the 
     `velocity_template.xml` file while making sure that it skips the default `APIAuthenticationHandler` implementation:

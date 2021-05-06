@@ -2,7 +2,7 @@
 
 Instead of requesting authorization directly from the resource owner (resource owner's credentials), in this grant type, the client directs the resource owner to an authorization server. The authorization server works as an intermediary between the client and resource owner to issues an authorization code, authenticate the resource owner and obtain authorization. As this is a redirection-based flow, the client must be capable of interacting with the resource owner's user-agent (typically a Web browser) and receiving incoming requests (via redirection) from the authorization server.
 
-#### Flow
+## Flow
 
 The client initiates the flow by directing the resource owner's user-agent to the authorization endpoint (you can use the `/authorize` endpoint for the authorization code grant type of OAuth 2.0). It includes the client identifier, response\_type, requested scope, and a redirection URI to which the authorization server sends the user-agent back after granting access. The authorization server authenticates the resource owner (via the user-agent) and establishes whether the resource owner granted or denied the client's access request. Assuming the resource owner grants access, the authorization server then redirects the user-agent back to the client using the redirection URI provided earlier. The redirection URI includes an authorization code.
 
@@ -10,9 +10,9 @@ The client then requests an access token from the authorization server's `/token
 
 The diagram below depicts the flow of Authorization Code Grant :
 
-![]({{base_path}}/assets/img/learn/oauth-authorization-code-grant-diagram.png)
+[![Authorization code flow diagram]({{base_path}}/assets/img/learn/oauth-authorization-code-grant-diagram.png)]({{base_path}}/assets/img/learn/oauth-authorization-code-grant-diagram.png)
 
-#### Invoking the Token API to generate tokens
+## Invoking the Token API to generate tokens
 
 Assuming that both the client and the API Gateway are run on the same server, the Authorization API URL is `http://wso2is.local:8080/authorize`.
 
@@ -62,14 +62,14 @@ login_url="/authenticationendpoint/login.do"
 retry_url="/authenticationendpoint/retry.do"
 ```
 
-### Try Authorization Code Grant
+## Try Authorization Code Grant
 
 The steps below show how access tokens are generated for the authorization code grant type.
 
 !!! note
     **Before you begin**
 
-    The following instructions use the sample playground webapp. For instructions on how to set up the sample webapp, see [Setting up the Sample Webapp](https://is.docs.wso2.com/en/5.10.0/develop/deploying-the-sample-app/).
+    The following instructions use the sample playground webapp. For instructions on how to set up the sample webapp, see [Setting up the Sample Webapp](https://is.docs.wso2.com/en/5.10.0/learn/deploying-the-sample-app/#deploying-the-playground2-webapp) .
 
 
 1.  Open a terminal window and add the following entry to the `/etc/hosts` file of your machine to configure the hostname.
@@ -89,19 +89,19 @@ The steps below show how access tokens are generated for the authorization code 
         
 2.  Log in to the API Developer Portal and create a new application.
 
-    [![]({{base_path}}/assets/img/learn/create-application.png)]({{base_path}}/assets/img/learn/create-application.png)
+    [![Create an Application]({{base_path}}/assets/img/learn/create-application.png)]({{base_path}}/assets/img/learn/create-application.png)
     
 3.  Go to the **Production Keys** tab.
 4.  Add the Callback URL of your playground app, select **Code** Grant type click **GENERATE KEYS.**
 
-    [![]({{base_path}}/assets/img/learn/authorization-code-grant.png)]({{base_path}}/assets/img/learn/authorization-code-grant.png)
+    [![Generate Keys]({{base_path}}/assets/img/learn/authorization-code-grant.png)]({{base_path}}/assets/img/learn/authorization-code-grant.png)
 
     !!! note
         By default the implicit and code grant type selection checkboxes are disabled in the UI. You need to enter the callback URL first to enable selecting the code grant type.
 
 5.  Go to the playground app and click Import Photos.
 
-    [![]({{base_path}}/assets/img/learn/playground2-app.png)]({{base_path}}/assets/img/learn/playground2-app.png)
+    [![Navigate to Playground app]({{base_path}}/assets/img/learn/playground2-app.png)]({{base_path}}/assets/img/learn/playground2-app.png)
     
 6.  Give the information in the table below and click **Authorize.**
 
@@ -113,15 +113,15 @@ The steps below show how access tokens are generated for the authorization code 
     | Callback URL             | The callback URL of your application                                                                  |
     | Authorize Endpoint       | `https://localhost:9443/oauth2/authorize`                                                             |
 
-    [![]({{base_path}}/assets/img/learn/playground2-oauth2-page.png)]({{base_path}}/assets/img/learn/playground2-oauth2-page.png)
+    [![Provide credentials]({{base_path}}/assets/img/learn/playground2-oauth2-page.png)]({{base_path}}/assets/img/learn/playground2-oauth2-page.png)
 
 7.  The playground application redirects to the login page. Enter you username and password and click **Sign In.**
 
-    [![]({{base_path}}/assets/img/learn/login-page.png)]({{base_path}}/assets/img/learn/login-page.png)
+    [![Login to OAuth2 Playground app]({{base_path}}/assets/img/learn/login-page.png)]({{base_path}}/assets/img/learn/login-page.png)
 
-8.  Select **Approve Once** or **Approve Always** to provide access to your profile information.
+8.  Select **Remember my consent** to remember the access to your profile information.
 
-    [![]({{base_path}}/assets/img/learn/authorization-code-consent-page.png)]({{base_path}}/assets/img/learn/authorization-code-consent-page.png)   
+    [![Provide Consent]({{base_path}}/assets/img/learn/authorization-code-consent-page.png)]({{base_path}}/assets/img/learn/authorization-code-consent-page.png)   
     
 9.  Provide following information in the redirected page and click on **Get Access token**.
 
@@ -142,9 +142,16 @@ The steps below show how access tokens are generated for the authorization code 
     </tbody>
     </table>
 
-    [![]({{base_path}}/assets/img/learn/authorization-code-get-accesstoken.png)]({{base_path}}/assets/img/learn/authorization-code-get-accesstoken.png)
+    [![Get Access Token]({{base_path}}/assets/img/learn/authorization-code-get-accesstoken.png)]({{base_path}}/assets/img/learn/authorization-code-get-accesstoken.png)
 
      You will receive the access token as follows:
 
-    [![]({{base_path}}/assets/img/learn/oauth-authorization-code-accesstoken.png)]({{base_path}}/assets/img/learn/oauth-authorization-code-accesstoken.png)
+    [![Copy Access Token]({{base_path}}/assets/img/learn/oauth-authorization-code-accesstoken.png)]({{base_path}}/assets/img/learn/oauth-authorization-code-accesstoken.png)
         
+!!! tip
+    If you want to **disable the Authorization Code grant type** in the API-M instance, add the following entry to the `deployment.toml` file in the `<APIM_HOME>/repository/conf/` folder.
+
+    ``` toml
+    [oauth.grant_type.authorization_code]
+    enable = false
+    ```

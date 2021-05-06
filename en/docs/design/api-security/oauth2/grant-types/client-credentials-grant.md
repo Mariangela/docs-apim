@@ -59,9 +59,17 @@ The client can request an access token using only its client credentials with th
 
 
 !!! tip
-    We use the Client Credentials grant type to generate access tokens for an application through the API Developer Portal. Therefore, you should enable this grant type to the application. To do that, go to the API Developer Portal, click the application name from under the **APPLICATIONS** tab, click the **Production Keys** tab, and select the **Client Credentials** check box under **Grant Types** in **Key Configurations**.
+    We use the Client Credentials grant type to generate access tokens for an application through the API Developer Portal. Therefore, you should enable this grant type to the application. To do that, go to the API Developer Portal, click the application name from under the **APPLICATIONS** tab, click the **OAuth2 Tokens** under **Production Keys** tab, and select the **Client Credentials** check box under **Grant Types** in **Key Configurations**.
 
     ![]({{base_path}}/assets/img/learn/client-credentials.png)
+
+!!! tip
+    If you want to **disable the Client Credentials grant type** in the APIM instance, add the following entry to the `deployment.toml` file in the `<APIM_HOME>/repository/conf/` folder.
+
+    ``` toml
+    [oauth.grant_type.client_credentials]
+    enable = false
+    ```
 
 !!! info
     **Setting a custom validity time for access tokens**
@@ -78,5 +86,3 @@ The client can request an access token using only its client credentials with th
     
 !!! note "Support for refresh token grant - No"
 	This grant type does not issue a refresh token which can be used to obtain new access tokens using the [refresh token grant](http://localhost:8000/learn/api-security/oauth2/grant-types/refresh-token-grant/).
-
-

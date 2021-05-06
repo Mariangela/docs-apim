@@ -12,7 +12,7 @@ The result of the query should be as follows when you query to view the records
 
 ### Step 1: Set up the workspace
 
-Download the relevant [WSO2 Integration Studio](https://wso2.com/integration/tooling/) based on your operating system.
+Download the relevant [WSO2 Integration Studio](https://wso2.com/api-management/tooling/) based on your operating system.
 
 Let's setup a MySQL database:
 
@@ -219,7 +219,7 @@ connect to the database to insert data.
 
 #### Create the Smooks configuration
 
-Create a smooks configuration as shown below. See the instructions on [creating a smooks configuration]({{base_path}}/integrate/develop/creating-artifacts/creating-smooks-artifacts). 
+Create a smooks configuration file (for example `smooks-config.xml`) as shown below and save it to a location on your computer. 
 
 ```xml
 <smooks-resource-list xmlns="http://www.milyn.org/xsd/smooks-1.0.xsd">
@@ -250,13 +250,13 @@ Package the artifacts in your composite application module to be able to deploy 
 
 ### Step 4: Configure the Micro Integrator server
 
-1.  Click the <b>Embedded Micro Integrator Configuration</b> (<img src="{{base_path}}/assets/img/tutorials/common/server-config-64x64.png" width="20">) icon on the upper menu to open the dialog box.
+1.  Click the <b>Embedded Micro Integrator Configuration</b> (<img src="{{base_path}}/assets/img/integrate/tutorials/common/server-config-64x64.png" width="20">) icon on the upper menu to open the dialog box.
 
-    <img src="{{base_path}}/assets/img/tutorials/file-processing/embedded-server-configs.png" width="500">
+    <img src="{{base_path}}/assets/img/integrate/tutorials/file-processing/embedded-server-configs.png" width="500">
 
 2.  Add the following server configurations (to the `deployment.toml` file) using the upper section in the dialog box.
 
-    -   The **VFS** transport is enabled in the Micro Integrator by default. Enable the [MailTo transport](../../../setup/transport_configurations/configuring-transports/#configuring-the-mailto-transport) for sending the email message as shown below and update the values:
+    -   The **VFS** transport is enabled in the Micro Integrator by default. Enable the [MailTo transport]({{base_path}}/install-and-setup/setup/mi-setup/transport_configurations/configuring-transports/#configuring-the-mailto-transport) for sending the email message as shown below and update the values:
 
         ```toml
         [[transport.mail.sender]]
@@ -279,7 +279,7 @@ Package the artifacts in your composite application module to be able to deploy 
         text_xml = "org.apache.axis2.transport.http.ApplicationXMLFormatter"
         ```
 
-3.  Click the (<img src="{{base_path}}/assets/img/tutorials/common/plus-icon.png" width="20">) icon in the lower section and add the following drivers and libraries. 
+3.  Click the (<img src="{{base_path}}/assets/img/integrate/tutorials/common/plus-icon.png" width="20">) icon in the lower section and add the following drivers and libraries. 
     -   [MySQL database driver](https://github.com/wso2-docs/WSO2_EI/blob/master/Integration-Tutorial-Artifacts/Integration-Tutorial-Artifacts-EI7.1.0/EI7.1.0-file-processing-tutorial-JARS/mysql-connector-java-5.1.10-bin.jar).
     -   [CSV smooks library](https://github.com/wso2-docs/WSO2_EI/blob/master/Integration-Tutorial-Artifacts/Integration-Tutorial-Artifacts-EI7.1.0/EI7.1.0-file-processing-tutorial-JARS/milyn-smooks-csv-1.2.4.jar).
 
