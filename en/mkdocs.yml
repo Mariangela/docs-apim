@@ -16,10 +16,10 @@
 # under the License.
 
 # Project information
-site_name: WSO2 API Manager Documentation 4.0.0
+site_name: WSO2 API Manager Documentation 4.0.x
 site_description: Documentation for WSO2 API Manager
 site_author: WSO2
-site_url: https://apim.docs.wso2.com/en/4.0.0/
+site_url: https://apim.docs.wso2.com/en/4.0.x/
 
 # Repository
 repo_name: wso2/docs-apim
@@ -731,6 +731,7 @@ nav:
                         - Configuring Microgateway: observe/api-manager-analytics/configure-analytics/configure-microgateway.md
                         - Configuring API Gateway: observe/api-manager-analytics/configure-analytics/configure-synapse-gateway.md
                     - Working with Organizations: observe/api-manager-analytics/configure-analytics/working-with-organizations.md
+                    - Working with Alerts: observe/api-manager-analytics/configure-analytics/configure-alerts.md
                 - Viewing APIM analytics:
                     - Pages:
                         - Introduction: observe/api-manager-analytics/analytics-pages/analytics-pages-introduction.md
@@ -970,8 +971,13 @@ nav:
                 - Kafka Overview: reference/connectors/kafka-connector/kafka-connector-overview.md
                 - Setting up Kafka: reference/connectors/kafka-connector/setting-up-kafka.md
                 - Enabling Security for Kafka: reference/connectors/kafka-connector/enabling-security-for-kafka.md
-                - Kafka Example: reference/connectors/kafka-connector/kafka-connector-producer-example.md
-                - Kafka Connector Reference: reference/connectors/kafka-connector/kafka-connector-config.md
+                - 3.1.x:
+                    - Kafka Example: reference/connectors/kafka-connector/kafka-connector-producer-example.md
+                    - Kafka Avro Message Example: reference/connectors/kafka-connector/kafka-connector-avro-producer-example.md
+                    - Kafka Connector Reference: reference/connectors/kafka-connector/kafka-connector-config.md
+                - 3.0.x:
+                    - Kafka Example: reference/connectors/kafka-connector/kafka-connector-producer-example.md
+                    - Kafka Connector Reference: reference/connectors/kafka-connector/3.0.x/kafka-connector-config.md
                 - Kafka Inbound Endpoint Example: reference/connectors/kafka-connector/kafka-inbound-endpoint-example.md
             - LDAP Connector:
                 - LDAP Overview: reference/connectors/ldap-connector/ldap-connector-overview.md
@@ -1182,17 +1188,6 @@ nav:
             - Java Documentation: reference/java-documentation.md
         - Best Practices:
             - WSO2 API-M Best Practices: reference/wso2-api-manager-best-practices.md
-        - Samples:
-            - API Development Sample:
-                - Managing APIs Sample: reference/samples/api-development-sample/managing-apis-sample.md
-                - Collaborative API Development Sample: reference/samples/api-development-sample/collaborative-api-development-sample.md
-                - Development of Developer Optimized APIs Sample: reference/samples/api-development-sample/development-of-developer-optimized-apis-sample.md
-            - API Governance Sample: reference/samples/api-governance-sample.md
-            - API Lifecycle Management Sample: reference/samples/api-lifecycle-management-sample.md
-            - API Rate Limiting Sample: reference/samples/api-rate-limiting-sample.md
-            - API Rate Monetization Sample: reference/samples/api-rate-monetization-sample.md
-            - API Security Sample: reference/samples/api-security-sample.md
-            - API Versioning Sample: reference/samples/api-versioning-sample.md
         - Guides:
             - Message Flow in the API Manager Gateway: reference/guides/message-flow-in-the-api-manager-gateway.md
             - Accessing API Manager by Multiple Devices Simultaneously: reference/guides/accessing-api-manager-by-multiple-devices-simultaneously.md
@@ -1419,7 +1414,6 @@ nav:
             - Deploying on Kubernetes:
                 - API-M on K8s:
                     - Deploying API-M on K8s using Helm Resources: install-and-setup/install/deploying-api-manager-with-kubernetes-or-openshift-resources.md
-                    - Deploying API-M on K8s using the Operator: install-and-setup/setup/kubernetes-operators/k8s-wso2am-operator.md
                 - Micro Integrator on K8s:
                     - Micro Integrator Deployment Patterns on K8s: install-and-setup/setup/mi-setup/deployment/kubernetes_deployment_patterns.md
                     - Deploying the Micro Integrator on K8s: install-and-setup/setup/mi-setup/deployment/kubernetes_deployment.md
@@ -1785,6 +1779,6 @@ extra:
           link: https://twitter.com/wso2
         - type: linkedin
           link: https://www.linkedin.com/company/wso2
-    site_version: 4.0.0
+    site_version: 4.0.x
     #base_path: http://localhost:8000
-    base_path: https://apim.docs.wso2.com/en/4.0.0
+    base_path: https://apim.docs.wso2.com/en/4.0.x
